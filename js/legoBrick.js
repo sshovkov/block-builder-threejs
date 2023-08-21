@@ -34,6 +34,8 @@ export function createLegoBrick() {
         cylinderMesh.position.z = param.z;
         group.add(cylinderMesh);
     }
+    group.castShadow = true;
+    group.receiveShadow = false;
 
     return group;
 }
