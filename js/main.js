@@ -4,13 +4,12 @@ let camera, scene, renderer;
 let pointer, raycaster, isShiftKeyDown = false;
 
 let hoverLegoMesh, hoverLegoMaterial;
-let boxGeometry, boxMaterial;
+let legoGeometry, legoMaterial;
+let plane;
 
 let colorWhite = 0xffffff;
 let colorBlue1 = 0xBCCCDC;
-let colorBlue2 = 0x829AB1;
-let colorBlue3 = 0x486581;
-let colorBlue4 = 0x102A43;
+let colorBlue2 = 0x486581;
 let colorLegoGreen = 0x90EE90;
 let colorGray = 0x808080;
 
@@ -32,7 +31,7 @@ function init() {
 
     // Scene
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(colorBlue3);
+    scene.background = new THREE.Color(colorBlue2);
 
     // Transparent Lego guide
     const hoverLegoGeometry = new THREE.BoxGeometry(legoWidth, legoHeight, legoDepth);
@@ -41,8 +40,8 @@ function init() {
     scene.add(hoverLegoMesh);
 
     // Lego brick
-    boxGeometry = new THREE.BoxGeometry(legoWidth, legoHeight, legoDepth);
-    boxMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
+    legoGeometry = new THREE.BoxGeometry(legoWidth, legoHeight, legoDepth);
+    legoMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
 
     // Grid
     const gridHelper = new THREE.GridHelper(1000, 20, colorWhite, colorBlue1);
@@ -57,7 +56,7 @@ function init() {
     // default orientation of the plane is XY, but we want it to be XZ, parallel to the grid
     planeGeometry.rotateX(- Math.PI / 2); // rotate plane 90 degrees counterclockwise around the x-axis
     const planeMaterial = new THREE.MeshBasicMaterial({ visible: false })
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane = new THREE.Mesh(planeGeometry, planeMaterial);
     scene.add(plane);
 
     // Add plane to objects array so that raycaster can consider it when performing intersection checks
@@ -96,7 +95,7 @@ function init() {
  * When the mouse moves, snap the position of the hoverLegoMesh to the nearest grid intersection.
  */
 function onPointerMove(event) {
-    // Calculate normalized coordinates of the mouse pointer within the window
+    // Calculate normalized coordinates of the pointer within the window
     const pointerNormalizedXCoord = (event.clientX / window.innerWidth) * 2 - 1
     const pointerNormalizedYCoord = - (event.clientY / window.innerHeight) * 2 + 1
     // Set the pointer vector with the normalized coordinates
@@ -111,7 +110,7 @@ function onPointerMove(event) {
         // Get the first intersection
         const intersect = intersections[0];
 
-        // Update the position of the 'hoverLegoMesh' to snap to the nearest grid intersection
+        // Set the position of the 'hoverLegoMesh' to snap to the nearest grid intersection
         hoverLegoMesh.position.copy(intersect.point).add(intersect.face.normal); // Sets the position of hoverLegoMesh to the intersection point, add() creates slight hovering effect
         hoverLegoMesh.position.divideScalar(50).floor().multiplyScalar(50).addScalar(25);
 
@@ -127,6 +126,9 @@ function onPointerMove(event) {
  * When the mouse is clicked, create new Lego brick at the position of the hoverLegoMesh.
  */
 function onPointerDown(event) {
+    // Ignore right clicks and other mouse buttons
+    if (event.button !== 0) return;
+
     // // Calculate normalized coordinates of the mouse pointer within the window
     const pointerNormalizedXCoord = (event.clientX / window.innerWidth) * 2 - 1
     const pointerNormalizedYCoord = - (event.clientY / window.innerHeight) * 2 + 1
@@ -138,28 +140,33 @@ function onPointerDown(event) {
     // Check for intersections between the ray projected from the pointer and the objects
     const intersections = raycaster.intersectObjects(objects, false);
 
+
     if (intersections.length > 0) {
         // Get the first intersection
         const intersect = intersections[0];
+
+        // Check if shift key is pressed
         if (isShiftKeyDown) {
-            // 
+            // Remove cube at intersection point
             if (intersect.object !== plane) {
                 scene.remove(intersect.object);
                 objects.splice(objects.indexOf(intersect.object), 1);
             }
-            // create cube
         } else {
+            // Add cube at intersection point
+            const legoBrick = new THREE.Mesh(legoGeometry, legoMaterial);
+            // Set the position of the new Lego brick at the nearest grid intersection
+            legoBrick.position.copy(intersect.point).add(intersect.face.normal);
+            legoBrick.position.divideScalar(50).floor().multiplyScalar(50).addScalar(25);
+            scene.add(legoBrick);
 
-            const voxel = new THREE.Mesh(boxGeometry, boxMaterial);
-            voxel.position.copy(intersect.point).add(intersect.face.normal);
-            voxel.position.divideScalar(50).floor().multiplyScalar(50).addScalar(25);
-            scene.add(voxel);
-
-            objects.push(voxel);
-
+            // Add the new Lego brick to the objects array for raycaster to consider it when performing intersection checks
+            objects.push(legoBrick);
         }
+        // Render to visualize the changes
         render();
     }
+
 }
 
 /**
@@ -169,7 +176,9 @@ function onPointerDown(event) {
  * When the shift key (code 16) is pressed, set isShiftKeyDown to true.
  */
 function onKeyDown(event) {
-    if (event.keyCode === 16) isShiftKeyDown = true;
+    if (event.keyCode === 16) {
+        isShiftKeyDown = true;
+    }
 }
 
 /**
@@ -179,7 +188,9 @@ function onKeyDown(event) {
  * When the shift key (code 16) is not pressed, set isShiftKeyDown to false.
  */
 function onKeyUp(event) {
-    if (event.keyCode === 16) isShiftKeyDown = false;
+    if (event.keyCode === 16) {
+        isShiftKeyDown = false;
+    }
 }
 
 /**
@@ -196,5 +207,5 @@ function onWindowResize() {
  * Render the scene.
  */
 function render() {
-    renderer.render(scene, camera);
+    renderer.render(scene, camera)
 }

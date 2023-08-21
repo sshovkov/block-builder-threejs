@@ -6,8 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Three.js Lego Brick</title>
     <link rel="stylesheet" href="css/main.css">
+    <style>
+        /* Add styles to the div */
+        div {
+            background-color: transparent; /* Make the background transparent */
+            text-align: center; /* Center-align the text */
+            padding: 20px; /* Add padding for better spacing */
+            position: absolute; /* Make the position absolute */
+            z-index: 1;
+            width: 100%;
+            color: white;
+            font-weight: 100;
+        }
+    </style>
 </head>
 <body>
     <script type="module" src="./js/main.js"></script>
+    <div>
+        <h3>Click anywhere in the grid to place a cube.</h3>
+        <h3>Press the shift key and click on an existing cube to remove it.</h3>
+    </div>
 </body>
 </html>
