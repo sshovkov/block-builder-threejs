@@ -1,22 +1,12 @@
 import * as THREE from 'three';
+import { Colors, LegoDimensions } from './constants.js';
 
+// Global variables
 let camera, scene, renderer;
 let pointer, raycaster, isShiftKeyDown = false;
-
 let hoverLegoMesh, hoverLegoMaterial;
 let legoGeometry, legoMaterial;
 let plane;
-
-let colorWhite = 0xffffff;
-let colorBlue1 = 0xBCCCDC;
-let colorBlue2 = 0x486581;
-let colorLegoGreen = 0x90EE90;
-let colorGray = 0x808080;
-
-let legoWidth = 50;
-let legoHeight = 50;
-let legoDepth = 50;
-
 const objects = []; // Objects that raycaster should consider when performing intersection checks
 
 init();
@@ -31,20 +21,20 @@ function init() {
 
     // Scene
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(colorBlue2);
+    scene.background = new THREE.Color(Colors.Blue2);
 
     // Transparent Lego guide
-    const hoverLegoGeometry = new THREE.BoxGeometry(legoWidth, legoHeight, legoDepth);
-    hoverLegoMaterial = new THREE.MeshBasicMaterial({ color: colorLegoGreen, opacity: 0.5, transparent: true });
+    const hoverLegoGeometry = new THREE.BoxGeometry(LegoDimensions.Width, LegoDimensions.Height, LegoDimensions.Depth);
+    hoverLegoMaterial = new THREE.MeshBasicMaterial({ color: Colors.LegoGreen, opacity: 0.5, transparent: true });
     hoverLegoMesh = new THREE.Mesh(hoverLegoGeometry, hoverLegoMaterial);
     scene.add(hoverLegoMesh);
 
     // Lego brick
-    legoGeometry = new THREE.BoxGeometry(legoWidth, legoHeight, legoDepth);
+    legoGeometry = new THREE.BoxGeometry(LegoDimensions.Width, LegoDimensions.Height, LegoDimensions.Depth);
     legoMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
 
     // Grid
-    const gridHelper = new THREE.GridHelper(1000, 20, colorWhite, colorBlue1);
+    const gridHelper = new THREE.GridHelper(1000, 20, Colors.White, Colors.Blue1);
     scene.add(gridHelper);
 
     // Raycaster
@@ -64,11 +54,11 @@ function init() {
 
     // Lighting
     // Ambient light - lights up all objects in the scene
-    const ambientLight = new THREE.AmbientLight(colorGray, 2);
+    const ambientLight = new THREE.AmbientLight(Colors.Gray, 2);
     scene.add(ambientLight);
 
     // Directional light - light source at an angle
-    const directionalLight = new THREE.DirectionalLight(colorWhite, 3);
+    const directionalLight = new THREE.DirectionalLight(Colors.White, 3);
     directionalLight.position.set(1, 0.75, 0.5).normalize(); // TODO: what does normalize do?
     scene.add(directionalLight);
 
