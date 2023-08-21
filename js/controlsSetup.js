@@ -1,6 +1,7 @@
 import { TrackballControls } from '../node_modules/three/examples/jsm/controls/TrackballControls.js';
 import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js'
 import { DragControls } from '../node_modules/three/examples/jsm/controls/DragControls.js';
+import { TransformControls } from '../node_modules/three/examples/jsm/controls/TransformControls.js';
 
 export function setupControls(camera, renderer, objects) {
     // Create orbit controls for rotating the scene

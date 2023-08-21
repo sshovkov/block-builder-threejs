@@ -1,14 +1,14 @@
 import * as THREE from '../node_modules/three/build/three.module.js';
 
 export function setupScene() {
+
     // Create Scene
     const scene = new THREE.Scene();
 
     // Create Camera
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.6, 1200);
-    camera.position.z = 0;
-    camera.position.y = 10;
-    camera.position.x = 0;
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.set(500, 800, 1300)
+    camera.lookAt(0, 0, 0)
 
     // Create Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -22,7 +22,10 @@ export function setupScene() {
         renderer.setSize(window.innerWidth, window.innerHeight);
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-    });
+    })
+
+    const gridHelper = new THREE.GridHelper(1000, 20);
+    scene.add(gridHelper);
 
     return { scene, camera, renderer };
 }

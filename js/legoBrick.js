@@ -1,13 +1,13 @@
-import * as THREE from '../node_modules/three/build/three.module.js';
+import * as THREE from '../node_modules/three/build/three.module.js'
 
 export function createLegoBrick() {
     // Create Group
     const group = new THREE.Group();
 
     // Create Box
-    const boxWidth = 2;
-    const boxHeight = 1.25;
-    const boxDepth = 2;
+    const boxWidth = 50
+    const boxHeight = 31.25;
+    const boxDepth = 50;
 
     const boxGeometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
     const boxMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
@@ -37,5 +37,5 @@ export function createLegoBrick() {
     group.castShadow = true;
     group.receiveShadow = false;
 
-    return group;
+    return { group };
 }
