@@ -31,7 +31,7 @@ function init() {
 
     // Lego brick
     legoGeometry = new THREE.BoxGeometry(LegoDimensions.Width, LegoDimensions.Height, LegoDimensions.Depth);
-    legoMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
+    legoMaterial = new THREE.MeshLambertMaterial({ color: Colors.LegoGreen });
 
     // Grid
     const gridHelper = new THREE.GridHelper(1000, 20, Colors.White, Colors.Blue1);
@@ -59,7 +59,7 @@ function init() {
 
     // Directional light - light source at an angle
     const directionalLight = new THREE.DirectionalLight(Colors.White, 3);
-    directionalLight.position.set(1, 0.75, 0.5).normalize(); // TODO: what does normalize do?
+    directionalLight.position.set(1, 0.75, 0.5).normalize();
     scene.add(directionalLight);
 
     // Renderer
