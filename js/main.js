@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Colors, LegoDimensions } from './constants.js';
+import { Colors, LegoColors, LegoDimensions } from './constants.js';
 
 // Global variables
 let camera, scene, renderer;
@@ -25,13 +25,12 @@ function init() {
 
     // Transparent Lego guide
     const hoverLegoGeometry = new THREE.BoxGeometry(LegoDimensions.Width, LegoDimensions.Height, LegoDimensions.Depth);
-    hoverLegoMaterial = new THREE.MeshBasicMaterial({ color: Colors.LegoGreen, opacity: 0.5, transparent: true });
+    hoverLegoMaterial = new THREE.MeshBasicMaterial({ color: LegoColors.Green, opacity: 0.5, transparent: true });
     hoverLegoMesh = new THREE.Mesh(hoverLegoGeometry, hoverLegoMaterial);
     scene.add(hoverLegoMesh);
 
     // Lego brick
     legoGeometry = new THREE.BoxGeometry(LegoDimensions.Width, LegoDimensions.Height, LegoDimensions.Depth);
-    legoMaterial = new THREE.MeshLambertMaterial({ color: Colors.LegoGreen });
 
     // Grid
     const gridHelper = new THREE.GridHelper(1000, 20, Colors.White, Colors.Blue1);
@@ -144,6 +143,8 @@ function onPointerDown(event) {
             }
         } else {
             // Create a lego brick
+            const randomColorValue = LegoColors[getRandomKey(LegoColors)];
+            legoMaterial = new THREE.MeshLambertMaterial({ color: randomColorValue });
             const legoBrick = new THREE.Mesh(legoGeometry, legoMaterial);
             // Set the position of the new Lego brick at the nearest grid intersection
             legoBrick.position.copy(intersect.point).add(intersect.face.normal);
@@ -157,6 +158,15 @@ function onPointerDown(event) {
         render();
     }
 
+}
+/**
+ * 
+ * @param {*} obj 
+ * @returns random key from obj
+ */
+function getRandomKey(obj) {
+    const keys = Object.keys(obj);
+    return keys[Math.floor(Math.random() * keys.length)];
 }
 
 /**
