@@ -5,6 +5,11 @@
     "three": "^0.155.0"
   },
   "scripts": {
-    "start": "parcel index.html --port 8080"
+    "start": "parcel index.html --port 8080",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "cssnano": "^4.1.11",
+    "postcss": "^8.4.28"
   }
 }
