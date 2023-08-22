@@ -178,6 +178,7 @@ function getRandomKey(obj) {
 function onKeyDown(event) {
     if (event.keyCode === 16) {
         isShiftKeyDown = true;
+        hoverLegoMesh.visible = false;
     }
 }
 
@@ -190,6 +191,7 @@ function onKeyDown(event) {
 function onKeyUp(event) {
     if (event.keyCode === 16) {
         isShiftKeyDown = false;
+        hoverLegoMesh.visible = true;
     }
 }
 
