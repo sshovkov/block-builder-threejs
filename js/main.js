@@ -137,13 +137,13 @@ function onPointerDown(event) {
 
         // Check if shift key is pressed
         if (isShiftKeyDown) {
-            // Remove cube at intersection point
+            // Remove lego brick at intersection point
             if (intersect.object !== plane) {
                 scene.remove(intersect.object);
                 objects.splice(objects.indexOf(intersect.object), 1);
             }
         } else {
-            // Add cube at intersection point
+            // Create a lego brick
             const legoBrick = new THREE.Mesh(legoGeometry, legoMaterial);
             // Set the position of the new Lego brick at the nearest grid intersection
             legoBrick.position.copy(intersect.point).add(intersect.face.normal);

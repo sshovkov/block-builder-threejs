@@ -3,6 +3,7 @@ export const Colors = {
     Blue1: 0xBCCCDC,
     Blue2: 0x486581,
     LegoGreen: 0x90EE90,
+    LegoRed: 0xFF0000,
     Gray: 0x808080,
 };
 
