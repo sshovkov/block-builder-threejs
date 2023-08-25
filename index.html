@@ -9,7 +9,7 @@
     <style>
         div {
             background-color: transparent;
-            text-align: center;
+            text-align: left;
             padding: 20px;
             position: absolute;
             z-index: 1;
@@ -17,14 +17,19 @@
             color: white;
             font-weight: 100;
         }
+        h3 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 100;
+            color: white;
+        }
     </style>
 </head>
 <body>
     <script type="module" src="./js/main.js"></script>
     <div>
-        <h3>Click anywhere in the grid to place a cube.</h3>
-        <h3>Press the shift key and click on an existing cube to remove it.</h3>
-        <h3>Press the esc key to enable orbit controls and fly around the grid.</h3>
+        <h3><b>Position Cubes:</b> Click anywhere on the grid to position a cube.</h3>
+        <h3><b>Remove Cubes:</b> Hold down the Shift key while clicking on an existing cube to remove it.</h3>
+        <h3><b>Orbit Controls: </b>Press the Esc key to activate orbit controls and explore the grid from different angles.</h3>
         <h3 id="status">Orbit controls disabled.</h3>
     </div>
 </body>
