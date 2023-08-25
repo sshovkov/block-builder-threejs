@@ -97,7 +97,7 @@ function onPointerMove(event) {
         hoverLegoMesh.visible = false;
         return
     }
-    hoverLegoMesh.visible = true;
+    if (!isShiftKeyDown) hoverLegoMesh.visible = true;
 
     // Calculate normalized coordinates of the pointer within the window
     const pointerNormalizedXCoord = (event.clientX / window.innerWidth) * 2 - 1
@@ -203,18 +203,6 @@ function onKeyDown(event) {
 }
 
 /**
- * Update the status message to indicate whether orbit controls are enabled or disabled.
- */
-function updateStatusMessage() {
-    const statusDiv = document.getElementById('status');
-    if (orbitControlsEnabled) {
-        statusDiv.textContent = "Orbit control enabled.";
-    } else {
-        statusDiv.textContent = "Orbit control disabled.";
-    }
-}
-
-/**
  * 
  * @param {*} event 
  * The keyup event is fired when a key is not pressed.
@@ -224,6 +212,18 @@ function onKeyUp(event) {
     if (event.keyCode === 16) {
         isShiftKeyDown = false;
         hoverLegoMesh.visible = true;
+    }
+}
+
+/**
+ * Update the status message to indicate whether orbit controls are enabled or disabled.
+ */
+function updateStatusMessage() {
+    const statusDiv = document.getElementById('status');
+    if (orbitControlsEnabled) {
+        statusDiv.textContent = "Orbit control enabled.";
+    } else {
+        statusDiv.textContent = "Orbit control disabled.";
     }
 }
 
