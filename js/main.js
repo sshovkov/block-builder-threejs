@@ -11,6 +11,7 @@ let legoGeometry, legoMaterial;
 let plane;
 let orbitControls;
 const objects = []; // Objects that raycaster should consider when performing intersection checks
+let orbitControlsEnabled = false; // Global variable to track OrbitControls state
 
 init();
 render();
@@ -76,11 +77,11 @@ function init() {
     document.addEventListener('pointerdown', onPointerDown); // user presses a mouse button
     document.addEventListener('keydown', onKeyDown); // user presses a key
     document.addEventListener('keyup', onKeyUp); // user releases a key
-
     window.addEventListener('resize', onWindowResize);
 
     // Orbit controls
     orbitControls = new OrbitControls(camera, renderer.domElement);
+    orbitControls.enabled = orbitControlsEnabled; // Set the initial state
     orbitControls.update()
 }
 
@@ -91,6 +92,13 @@ function init() {
  * When the mouse moves, snap the position of the hoverLegoMesh to the nearest grid intersection.
  */
 function onPointerMove(event) {
+    // Hide hover guide if orbit controls are enabled
+    if (orbitControlsEnabled) {
+        hoverLegoMesh.visible = false;
+        return
+    }
+    hoverLegoMesh.visible = true;
+
     // Calculate normalized coordinates of the pointer within the window
     const pointerNormalizedXCoord = (event.clientX / window.innerWidth) * 2 - 1
     const pointerNormalizedYCoord = - (event.clientY / window.innerHeight) * 2 + 1
@@ -122,8 +130,8 @@ function onPointerMove(event) {
  * When the mouse is clicked, create new Lego brick at the position of the hoverLegoMesh.
  */
 function onPointerDown(event) {
-    // Ignore right clicks and other mouse buttons
-    if (event.button !== 0) return;
+    // Ignore right clicks and if orbit controls are enabled
+    if (event.button !== 0 || orbitControlsEnabled) return;
 
     // // Calculate normalized coordinates of the mouse pointer within the window
     const pointerNormalizedXCoord = (event.clientX / window.innerWidth) * 2 - 1
@@ -187,6 +195,23 @@ function onKeyDown(event) {
         isShiftKeyDown = true;
         hoverLegoMesh.visible = false;
     }
+    if (event.keyCode === 27) { // Esc key
+        orbitControlsEnabled = !orbitControlsEnabled;
+        orbitControls.enabled = orbitControlsEnabled;
+        updateStatusMessage()
+    }
+}
+
+/**
+ * Update the status message to indicate whether orbit controls are enabled or disabled.
+ */
+function updateStatusMessage() {
+    const statusDiv = document.getElementById('status');
+    if (orbitControlsEnabled) {
+        statusDiv.textContent = "Orbit control enabled.";
+    } else {
+        statusDiv.textContent = "Orbit control disabled.";
+    }
 }
 
 /**
@@ -225,6 +250,8 @@ function render() {
 function animate() {
     requestAnimationFrame(animate);
 
-    orbitControls.update()
+    if (orbitControlsEnabled) {
+        orbitControls.update();
+    }
     render();
 }
