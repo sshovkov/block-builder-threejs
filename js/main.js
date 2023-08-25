@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { Colors, LegoColors, LegoDimensions } from './constants.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
 
 // Global variables
 let camera, scene, renderer;
@@ -7,10 +9,12 @@ let pointer, raycaster, isShiftKeyDown = false;
 let hoverLegoMesh, hoverLegoMaterial;
 let legoGeometry, legoMaterial;
 let plane;
+let orbitControls;
 const objects = []; // Objects that raycaster should consider when performing intersection checks
 
 init();
 render();
+animate();
 
 function init() {
 
@@ -75,6 +79,9 @@ function init() {
 
     window.addEventListener('resize', onWindowResize);
 
+    // Orbit controls
+    orbitControls = new OrbitControls(camera, renderer.domElement);
+    orbitControls.update()
 }
 
 /**
@@ -206,8 +213,18 @@ function onWindowResize() {
 }
 
 /**
- * Render the scene.
+ * Render the scene
  */
 function render() {
     renderer.render(scene, camera)
+}
+
+/**
+ * Animate function for continuous rendering and updates.
+ */
+function animate() {
+    requestAnimationFrame(animate);
+
+    orbitControls.update()
+    render();
 }
